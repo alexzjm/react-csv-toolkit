@@ -37,6 +37,12 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
         }
     }
 
+    const handleInputChange = (newValue, rowIdx, colIdx) => {
+        const newTable = parsedCsv;
+        newTable[rowIdx][colIdx] = newValue;
+        updateParsedCsv(newTable);
+    }
+
     return (
         <table>
             <tr>
@@ -49,10 +55,14 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                     {rowIdx != 0 && subArr.map((val, colIdx) => {
                         if (editMode && rowEditIdx == rowIdx && colEditIdx == colIdx) {
                             return (
-                                <td key={colIdx}>To be edited</td>
+                                <td key={colIdx}>
+                                    <form>
+                                        <input type="text" onChange={(e) => handleInputChange(e.target.value, rowIdx, colIdx)}></input>
+                                    </form>
+                                </td>
                             )
                         } else {
-                            return (<td key={colIdx} onClick={() => updateEditIdx(rowIdx, colIdx)}>
+                            return (<td key={colIdx} onClick={() => handleClick(rowIdx, colIdx)}>
                                 {val}
                             </td>)
                         }

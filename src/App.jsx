@@ -47,8 +47,8 @@ function App() {
       <ToggleEditButton
         editMode={editMode}
         updateEditModeStatus={updateEditModeStatus}
+        updateEditIdx={updateEditIdx}
       />
-      <button onClick={() => {console.log(editMode)}}>tester</button>
     </>
   )
 }
