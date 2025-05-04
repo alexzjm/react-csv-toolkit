@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
-import Test from './components/Test'
-import TableDisplay from './components/TableDisplay'
+import InteractiveTable from './components/InteractiveTable'
 import './App.css'
+import ToggleEditButton from './components/ToggleEditButton'
 
 const exampleFile = [
   ["Name", "Position", "Appearances", "Goals", "Assists"],
@@ -18,12 +18,37 @@ function App() {
   const [parsedCsv, setParsedCsv] = useState(exampleFile)
   const [rowEditIdx, setRowEditIdx] = useState(-1);
   const [colEditIdx, setColEditIdx] = useState(-1);
+  const [editMode, setEditMode] = useState(false);
+
+  const updateParsedCsv = (updatedCsv) => {
+    setParsedCsv(updatedCsv);
+  }
+
+  const updateEditIdx = (rowIdx, colIdx) => {
+    setRowEditIdx(rowIdx);
+    setColEditIdx(colIdx);
+  }
+
+  const updateEditModeStatus = (status) => {
+    setEditMode(status);
+  }
 
   return (
     <>
       <h1>hello world</h1>
-      <Test />
-      <TableDisplay parsedCsv={parsedCsv}/>
+      <InteractiveTable 
+        parsedCsv={parsedCsv}
+        updateParsedCsv={updateParsedCsv}
+        editMode={editMode}
+        rowEditIdx={rowEditIdx}
+        colEditIdx={colEditIdx}
+        updateEditIdx={updateEditIdx}
+      />
+      <ToggleEditButton
+        editMode={editMode}
+        updateEditModeStatus={updateEditModeStatus}
+      />
+      <button onClick={() => {console.log(editMode)}}>tester</button>
     </>
   )
 }

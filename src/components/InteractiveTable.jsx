@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
 
-function TableDisplay({ parsedCsv }) {
+function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, 
+    rowEditIdx, colEditIdx, updateEditIdx }) {
 
-    const [table, setTable] = useState(parsedCsv); // 2D array CSV file representation
     const [sortByIdx, setSortByIdx] = useState(-1);
     const [reverseSort, setReverseSort] = useState(false);
     
@@ -19,7 +19,7 @@ function TableDisplay({ parsedCsv }) {
             revSort = !reverseSort;
         }
 
-        const tempTable = table.slice(1);
+        const tempTable = parsedCsv.slice(1);
         tempTable.sort((a, b) => {
             if (revSort) {
                 return a[colIdx] < b[colIdx] ? 1 : -1;
@@ -27,42 +27,40 @@ function TableDisplay({ parsedCsv }) {
                 return a[colIdx] > b[colIdx] ? 1 : -1;
             }
         });
-        const newTable = table.slice(0, 1).concat(tempTable);
-        setTable(newTable);
+        const newTable = parsedCsv.slice(0, 1).concat(tempTable);
+        updateParsedCsv(newTable);
+    }
+
+    const handleClick = (rowIdx, colIdx) => {
+        if (editMode) {
+            updateEditIdx(rowIdx, colIdx);
+        }
     }
 
     return (
         <table>
             <tr>
-                {table[0].map((header, colIdx) => 
+                {parsedCsv[0].map((header, colIdx) => 
                     <th key={colIdx} onClick={() => sortTable(colIdx)}>{header}</th>
                 )}
             </tr>
-            {table.map((subArr, rowIdx) => 
+            {parsedCsv.map((subArr, rowIdx) => 
                 <tr key={rowIdx}>
-                    {rowIdx != 0 && subArr.map((val, colIdx) => 
-                        <td key={colIdx}>
-                            {val}
-                        </td>
-                    )}
+                    {rowIdx != 0 && subArr.map((val, colIdx) => {
+                        if (editMode && rowEditIdx == rowIdx && colEditIdx == colIdx) {
+                            return (
+                                <td key={colIdx}>To be edited</td>
+                            )
+                        } else {
+                            return (<td key={colIdx} onClick={() => updateEditIdx(rowIdx, colIdx)}>
+                                {val}
+                            </td>)
+                        }
+                    })}
                 </tr>
             )}
         </table>
     );
 }
 
-export default TableDisplay
-
-/*
-<table>
-            {props.parsedCsv.map((subArr, rowIdx) => 
-                <tr key={rowIdx}>
-                    {subArr.map((val, colIdx) => 
-                        <td key={colIdx}>
-                            {val}
-                        </td>
-                    )}
-                </tr>
-            )}
-        </table>
-*/
+export default InteractiveTable
