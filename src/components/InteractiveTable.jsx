@@ -46,9 +46,22 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
     return (
         <table>
             <tr>
-                {parsedCsv[0].map((header, colIdx) => 
-                    <th key={colIdx} onClick={() => sortTable(colIdx)}>{header}</th>
-                )}
+                {parsedCsv[0].map((header, colIdx) => {
+                    if (editMode) {
+                        if (rowEditIdx == 0 && colEditIdx == colIdx) {
+                            return <th key={colIdx}>
+                                <form>
+                                    <input type="text" onChange={(e) => handleInputChange(e.target.value, 0, colIdx)}></input>
+                                </form>
+                            </th>
+                        } else {
+                            return <th key={colIdx} onClick={() => handleClick(0, colIdx)}>{header}</th>
+                        }
+                        
+                    } else {
+                        return <th key={colIdx} onClick={() => sortTable(colIdx)}>{header}</th>
+                    }
+                })}
             </tr>
             {parsedCsv.map((subArr, rowIdx) => 
                 <tr key={rowIdx}>

@@ -38,10 +38,15 @@ function App() {
     const newSubArr = [];
     
     for (let i = 0; i < newTable[0].length; i++) {
-      newSubArr.push("");
+      newSubArr.push("-");
     }
     newTable.push(newSubArr)
 
+    setParsedCsv(newTable);
+  }
+
+  const addEmptyCol = () => {
+    const newTable = parsedCsv.map(subArr => [ ...subArr, "-"]);
     setParsedCsv(newTable);
   }
 
@@ -61,7 +66,8 @@ function App() {
         updateEditModeStatus={updateEditModeStatus}
         updateEditIdx={updateEditIdx}
       />
-      <button onClick={() => addEmptyRow()}>Add Row</button>
+      <button onClick={addEmptyRow}>Add Row</button>
+      <button onClick={addEmptyCol}>Add Column</button>
     </>
   )
 }
