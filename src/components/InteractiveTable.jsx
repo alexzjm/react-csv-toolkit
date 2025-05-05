@@ -38,7 +38,7 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
     }
 
     const handleInputChange = (newValue, rowIdx, colIdx) => {
-        const newTable = parsedCsv;
+        const newTable = parsedCsv.map(subArr => [ ...subArr ]);
         newTable[rowIdx][colIdx] = newValue;
         updateParsedCsv(newTable);
     }

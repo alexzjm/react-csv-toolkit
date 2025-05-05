@@ -33,6 +33,18 @@ function App() {
     setEditMode(status);
   }
 
+  const addEmptyRow = () => {
+    const newTable = parsedCsv.map(subArr => [ ...subArr ]); // cloning
+    const newSubArr = [];
+    
+    for (let i = 0; i < newTable[0].length; i++) {
+      newSubArr.push("");
+    }
+    newTable.push(newSubArr)
+
+    setParsedCsv(newTable);
+  }
+
   return (
     <>
       <h1>hello world</h1>
@@ -49,6 +61,7 @@ function App() {
         updateEditModeStatus={updateEditModeStatus}
         updateEditIdx={updateEditIdx}
       />
+      <button onClick={() => addEmptyRow()}>Add Row</button>
     </>
   )
 }

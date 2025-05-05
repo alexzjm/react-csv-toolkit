@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 
 function ToggleEditButton({ editMode, updateEditModeStatus, updateEditIdx }) {
 
@@ -9,6 +8,7 @@ function ToggleEditButton({ editMode, updateEditModeStatus, updateEditIdx }) {
         }
         updateEditModeStatus(!editMode);
     }
+    
     return (
         <button onClick={handleSubmit}>
             {editMode ? "Save" : "Edit"}
