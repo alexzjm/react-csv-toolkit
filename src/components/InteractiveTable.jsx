@@ -44,44 +44,49 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
     }
 
     return (
-        <table>
-            <tr>
-                {parsedCsv[0].map((header, colIdx) => {
-                    if (editMode) {
-                        if (rowEditIdx == 0 && colEditIdx == colIdx) {
-                            return <th key={colIdx}>
-                                <form>
-                                    <input type="text" onChange={(e) => handleInputChange(e.target.value, 0, colIdx)}></input>
-                                </form>
-                            </th>
-                        } else {
-                            return <th key={colIdx} onClick={() => handleClick(0, colIdx)}>{header}</th>
-                        }
-                        
-                    } else {
-                        return <th key={colIdx} onClick={() => sortTable(colIdx)}>{header}</th>
-                    }
-                })}
-            </tr>
-            {parsedCsv.map((subArr, rowIdx) => 
-                <tr key={rowIdx}>
-                    {rowIdx != 0 && subArr.map((val, colIdx) => {
-                        if (editMode && rowEditIdx == rowIdx && colEditIdx == colIdx) {
-                            return (
-                                <td key={colIdx}>
+        <table className="min-w-full text-sm border border-gray-200">
+            <thead className="bg-gray-100 text-gray-700">
+                <tr>
+                    {parsedCsv[0].map((header, colIdx) => {
+                        if (editMode) {
+                            if (rowEditIdx == 0 && colEditIdx == colIdx) {
+                                return <th key={colIdx}>
                                     <form>
-                                        <input type="text" onChange={(e) => handleInputChange(e.target.value, rowIdx, colIdx)}></input>
+                                        <input type="text" onChange={(e) => handleInputChange(e.target.value, 0, colIdx)}></input>
                                     </form>
-                                </td>
-                            )
+                                </th>
+                            } else {
+                                return <th key={colIdx} onClick={() => handleClick(0, colIdx)} class="px-4 py-2 border">{header}</th>
+                            }
+                            
                         } else {
-                            return (<td key={colIdx} onClick={() => handleClick(rowIdx, colIdx)}>
-                                {val}
-                            </td>)
+                            return <th key={colIdx} onClick={() => sortTable(colIdx)} class="px-4 py-2 border">{header}</th>
                         }
                     })}
                 </tr>
-            )}
+            </thead>
+
+            <tbody class="text-gray-800">
+                {parsedCsv.map((subArr, rowIdx) => 
+                    <tr key={rowIdx}>
+                        {rowIdx != 0 && subArr.map((val, colIdx) => {
+                            if (editMode && rowEditIdx == rowIdx && colEditIdx == colIdx) {
+                                return (
+                                    <td key={colIdx} className="px-4 py-2 border">
+                                        <form>
+                                            <input type="text" onChange={(e) => handleInputChange(e.target.value, rowIdx, colIdx)}></input>
+                                        </form>
+                                    </td>
+                                )
+                            } else {
+                                return (<td key={colIdx} onClick={() => handleClick(rowIdx, colIdx)} className="px-4 py-2 border">
+                                    {val}
+                                </td>)
+                            }
+                        })}
+                    </tr>
+                )}
+            </tbody>
         </table>
     );
 }
