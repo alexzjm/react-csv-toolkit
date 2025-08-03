@@ -1,11 +1,37 @@
-# React + Vite
+# React CSV Toolkit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, browser-based CSV viewer and toolkit built with React and Tailwind CSS. Easily upload and inspect CSV files with a clean, responsive UI.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Upload and parse `.csv` files
+- Dynamic table rendering with scrollable UI
+- Instant preview — no backend required
+- Clean and responsive layout (Tailwind CSS)
+
+## Getting Started (Development)
+
+1. **Clone the repo**
+
+   ```bash
+   git clone https://github.com/yourusername/react-csv-toolkit.git
+   cd react-csv-toolkit
+   ```
+
+2. **Install dependencies**
+
+  ```bash
+  npm install
+  ```
+
+3. **Run the app**
+
+  ```bash
+  npm start
+  ```
+
+4. **Upload your CSV and view the parsed data instantly!**
+
 
 ## Expanding the ESLint configuration
 
