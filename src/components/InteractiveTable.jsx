@@ -43,6 +43,11 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
         updateParsedCsv(newTable);
     }
 
+    // Helper function to check if a value is a number
+    const isNumber = (value) => {
+        return typeof value === 'number' || (!isNaN(value) && value !== '' && !isNaN(parseFloat(value)));
+    }
+
     return (
         <div className="overflow-x-auto shadow-sm border border-gray-200 rounded-lg">
             <table className="min-w-full text-sm">
@@ -75,7 +80,14 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                     onClick={() => sortTable(colIdx)} 
                                     className="px-6 py-4 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors duration-150"
                                 >
-                                    {header}
+                                    <div className="flex items-center justify-between">
+                                        <span>{header}</span>
+                                        {sortByIdx === colIdx && (
+                                            <span className="ml-2 text-blue-600">
+                                                {reverseSort ? '↓' : '↑'}
+                                            </span>
+                                        )}
+                                    </div>
                                 </th>
                             }
                         })}
@@ -102,7 +114,9 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                         <td 
                                             key={colIdx} 
                                             onClick={() => handleClick(rowIdx, colIdx)} 
-                                            className={`px-6 py-4 text-gray-900 ${editMode ? 'cursor-pointer' : ''}`}
+                                            className={`px-6 py-4 ${editMode ? 'cursor-pointer' : ''} ${
+                                                isNumber(val) ? 'text-blue-600 font-medium' : 'text-gray-900'
+                                            }`}
                                         >
                                             {val}
                                         </td>

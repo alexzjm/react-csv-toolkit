@@ -34,7 +34,10 @@ function App() {
     console.log("the length of the input csvstring is " + csvString.length);
     while (endIdx < csvString.length) {
       if (csvString[endIdx] == ',' || csvString[endIdx] == '\n') {
-        subArr.push(csvString.slice(startIdx, endIdx));
+        const value = csvString.slice(startIdx, endIdx);
+        // Convert to number if possible, otherwise keep as string
+        const numValue = parseFloat(value);
+        subArr.push(!isNaN(numValue) && value.trim() !== '' ? numValue : value);
         console.log(csvString.slice(startIdx, endIdx));
         console.log(subArr);
         startIdx = endIdx + 1;
@@ -43,7 +46,7 @@ function App() {
           subArr.splice(0, subArr.length);
         }
       } else if (csvString[endIdx] == '\r') {
-        console.log("what the fuck is this doing here");
+        console.log("Unexpected escape character found");
       }
       endIdx++;
     }
