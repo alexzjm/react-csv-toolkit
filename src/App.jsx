@@ -4,6 +4,7 @@ import InteractiveTable from './components/InteractiveTable'
 import './App.css'
 import ToggleEditButton from './components/ToggleEditButton'
 import Header from './components/Header'
+import UploadForm from './components/UploadForm'
 
 const exampleFile = [
   ["Name", "Position", "Appearances", "Goals", "Assists"],
@@ -123,11 +124,7 @@ function App() {
     <>
       <Header />
       
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <form className="block mb-4">
-          <input type="file" accept=".csv" onChange={e => handleFileInput(e.target.files)} className="mt-2 block w-full border border-gray-300 rounded px-3 py-2 text-sm shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-        </form>
-      </div>
+      <UploadForm onFileUpload={handleFileInput} />
       
       <div className="max-w-4xl mx-auto px-4 py-8">
         <InteractiveTable 
