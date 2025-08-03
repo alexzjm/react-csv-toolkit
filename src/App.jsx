@@ -5,6 +5,7 @@ import './App.css'
 import ToggleEditButton from './components/ToggleEditButton'
 import Header from './components/Header'
 import UploadForm from './components/UploadForm'
+import Footer from './components/Footer'
 
 const exampleFile = [
   ["Name", "Position", "Appearances", "Goals", "Assists"],
@@ -146,6 +147,8 @@ function App() {
         <button onClick={addEmptyCol} className="bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded text-sm shadow-sm border border-blue-200">Add Column</button>
         <button onClick={handleDownload} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow-sm text-sm">Download</button>
       </div>
+
+      <Footer />
     </>
   )
 }

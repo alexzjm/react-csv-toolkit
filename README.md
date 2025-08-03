@@ -2,7 +2,7 @@
 
 A lightweight, browser-based CSV viewer and toolkit built with React and Tailwind CSS. Easily upload and inspect CSV files with a clean, responsive UI.
 
-Deployed using Vercel at react-csv-toolkit.vercel.app
+Deployed using Vercel at https://react-csv-toolkit.vercel.app/
 
 ## Features
 
