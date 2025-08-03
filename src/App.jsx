@@ -3,6 +3,7 @@ import { useState } from 'react'
 import InteractiveTable from './components/InteractiveTable'
 import './App.css'
 import ToggleEditButton from './components/ToggleEditButton'
+import Header from './components/Header'
 
 const exampleFile = [
   ["Name", "Position", "Appearances", "Goals", "Assists"],
@@ -120,27 +121,7 @@ function App() {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">CSV Editor/Viewer</h1>
-        <p className="text-gray-600 mb-2">
-          A web-based CSV file viewer and editor built with React. 
-          Users can upload CSV files, display them in a dynamic, 
-          interactive table, and perform actions such as sorting, 
-          searching, editing, and downloading modified data. 
-          The project emphasizes component-based architecture, 
-          React state management, file parsing, and client-side 
-          file generation without a backend.
-        </p>
-        <p className="text-gray-600 mb-2">
-          Get started by uploading a csv file from your local! 
-          Then, feel free to modify it! Click on a header to sort
-          by column. Use edit mode to edit specific cells. 
-          When you're done, click the download button to save your progress!
-        </p>
-        <p className="text-sm text-gray-500 italic mb-4">
-          Author: Alex Zhang
-        </p>
-      </div>
+      <Header />
       
       <div className="max-w-4xl mx-auto px-4 py-8">
         <form className="block mb-4">
