@@ -45,19 +45,18 @@ const UploadForm = ({ onFileUpload }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div 
-        className={`
-          border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
-          ${isDragOver 
-            ? 'border-blue-400 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-          }
-        `}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
+    <div 
+      className={`
+        border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
+        ${isDragOver 
+          ? 'border-blue-400 bg-blue-50' 
+          : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+        }
+      `}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
         <div className="space-y-4">
           <div className="text-6xl text-gray-400 mb-4">
             📁
@@ -95,7 +94,6 @@ const UploadForm = ({ onFileUpload }) => {
           className="hidden"
         />
       </div>
-    </div>
   );
 };
 

@@ -2,17 +2,20 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-4">CSV Editor</h1>
-      <p className="text-gray-600 mb-2">
-        Upload a CSV file to view and edit it in a table format.
-      </p>
-      <p className="text-gray-600 mb-2">
-        Click column headers to sort, use edit mode to modify cells, and download when finished.
-      </p>
-      <p className="text-sm text-gray-500 italic mb-4">
-        By Alex Zhang
-      </p>
+    <div className="bg-white border-b border-gray-200">
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">CSV Editor</h1>
+            <p className="text-gray-600 text-sm mt-1">
+              Upload, view, and edit CSV files with ease
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-gray-500">By Alex Zhang</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
