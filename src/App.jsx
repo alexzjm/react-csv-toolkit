@@ -5,6 +5,7 @@ import './App.css'
 import ToggleEditButton from './components/ToggleEditButton'
 import Header from './components/Header'
 import UploadForm from './components/UploadForm'
+import SwapPopup from './components/SwapPopup'
 import Footer from './components/Footer'
 
 const realMadridGoals = [
@@ -37,6 +38,7 @@ function App() {
   const [colEditIdx, setColEditIdx] = useState(-1);
   const [editMode, setEditMode] = useState(false);
   const [originalFileName, setOriginalFileName] = useState('');
+  const [showSwapPopup, setShowSwapPopup] = useState(false);
 
   const parseCsv = (csvString) => {
     const table = [];
@@ -208,6 +210,12 @@ function App() {
                     >
                       + Column
                     </button>
+                    <button 
+                      onClick={() => setShowSwapPopup(true)} 
+                      className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-800 dark:hover:text-white cursor-pointer px-2 py-1 text-sm transition-colors duration-200"
+                    >
+                      Swap
+                    </button>
                   </div>
                   <button 
                     onClick={handleDownload} 
@@ -220,6 +228,18 @@ function App() {
            </section>
         </div>
       </main>
+
+      <SwapPopup 
+        isOpen={showSwapPopup}
+        onClose={() => setShowSwapPopup(false)}
+        onSwap={(type, idx1, idx2) => {
+          // Placeholder for swap logic - will implement later
+          console.log(`Swapping ${type}s at indices ${idx1} and ${idx2}`);
+        }}
+        maxRows={parsedCsv.length}
+        maxCols={parsedCsv[0]?.length || 0}
+        parsedCsv={parsedCsv}
+      />
 
       <Footer />
     </div>
