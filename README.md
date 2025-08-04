@@ -4,6 +4,8 @@ A lightweight, browser-based CSV viewer and toolkit built with React and Tailwin
 
 Deployed using Vercel at https://react-csv-toolkit.vercel.app/
 
+Favicon by Freepik
+
 ## Features
 
 - Upload and parse `.csv` files
