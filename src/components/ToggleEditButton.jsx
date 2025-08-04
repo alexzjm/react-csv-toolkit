@@ -10,7 +10,16 @@ function ToggleEditButton({ editMode, updateEditModeStatus, updateEditIdx }) {
     }
 
     return (
-        <button onClick={handleSubmit} className="bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded text-sm shadow-sm border border-blue-200">
+        <button 
+            onClick={handleSubmit} 
+            className={`
+                text-sm font-medium transition-colors cursor-pointer px-3 py-1 rounded
+                ${editMode 
+                    ? 'text-green-600 hover:text-green-700 bg-green-50 hover:bg-green-100' 
+                    : 'text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100'
+                }
+            `}
+        >
             {editMode ? "Save" : "Edit"}
         </button>
     );

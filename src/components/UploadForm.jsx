@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 
 const UploadForm = ({ onFileUpload }) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -44,10 +46,10 @@ const UploadForm = ({ onFileUpload }) => {
     fileInputRef.current.click();
   };
 
-  return (
+    return (
     <div 
       className={`
-        border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
+        border border-dashed rounded-lg p-6 text-center transition-all duration-200
         ${isDragOver 
           ? 'border-blue-400 bg-blue-50' 
           : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
@@ -57,43 +59,41 @@ const UploadForm = ({ onFileUpload }) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-        <div className="space-y-4">
-          <div className="text-6xl text-gray-400 mb-4">
-            📁
-          </div>
+             <div className="space-y-3">
+         <div className="text-4xl text-gray-400">
+           <FontAwesomeIcon icon={faFolderOpen} />
+         </div>
+        
+        <div>
+          <h3 className="text-lg font-medium text-gray-700 mb-1">
+            {fileName ? fileName : 'Upload CSV File'}
+          </h3>
           
-          <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-gray-700">
-              {fileName ? `Selected: ${fileName}` : 'Upload CSV File'}
-            </h3>
-            
-            <p className="text-gray-500">
-              {fileName 
-                ? 'Click to change file or drag and drop a new CSV file here'
-                : 'Drag and drop your CSV file here, or click to browse'
-              }
-            </p>
-          </div>
-
-          <div className="pt-4">
-            <button 
-              type="button"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
-              onClick={handleClick}
-            >
-              {fileName ? 'Change File' : 'Choose File'}
-            </button>
-          </div>
+          <p className="text-sm text-gray-500">
+            {fileName 
+              ? 'Click to change file'
+              : 'Drag and drop or click to browse'
+            }
+          </p>
         </div>
 
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".csv"
-          onChange={handleFileSelect}
-          className="hidden"
-        />
+        <button 
+          type="button"
+          className="text-blue-600 hover:text-blue-700 cursor-pointer font-medium text-sm transition-colors"
+          onClick={handleClick}
+        >
+          {fileName ? 'Change File' : 'Choose File'}
+        </button>
       </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
+    </div>
   );
 };
 
