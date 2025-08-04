@@ -49,10 +49,10 @@ const UploadForm = ({ onFileUpload }) => {
     return (
     <div 
       className={`
-        border border-dashed rounded-lg p-6 text-center transition-all duration-200
+        border border-dashed rounded-lg p-6 text-center transition-all duration-300
         ${isDragOver 
-          ? 'border-blue-400 bg-blue-50' 
-          : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+          ? 'border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+          : 'border-zinc-300 dark:border-zinc-600 hover:border-zinc-400 dark:hover:border-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-800'
         }
       `}
       onDragOver={handleDragOver}
@@ -60,16 +60,16 @@ const UploadForm = ({ onFileUpload }) => {
       onDrop={handleDrop}
     >
              <div className="space-y-3">
-         <div className="text-4xl text-gray-400">
+         <div className="text-4xl text-zinc-400 dark:text-zinc-500">
            <FontAwesomeIcon icon={faFolderOpen} />
          </div>
         
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-1">
+          <h3 className="text-lg font-medium text-zinc-700 dark:text-zinc-200 mb-1">
             {fileName ? fileName : 'Upload CSV File'}
           </h3>
           
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
             {fileName 
               ? 'Click to change file'
               : 'Drag and drop or click to browse'
@@ -79,7 +79,7 @@ const UploadForm = ({ onFileUpload }) => {
 
         <button 
           type="button"
-          className="text-blue-600 hover:text-blue-700 cursor-pointer font-medium text-sm transition-colors"
+          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer font-medium text-sm transition-colors duration-300"
           onClick={handleClick}
         >
           {fileName ? 'Change File' : 'Choose File'}

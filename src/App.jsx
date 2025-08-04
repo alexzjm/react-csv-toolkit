@@ -31,6 +31,7 @@ const realMadridGoals = [
 ];
 
 function App() {
+  const [showTip, setShowTip] = useState(true);
   const [parsedCsv, setParsedCsv] = useState(realMadridGoals);
   const [rowEditIdx, setRowEditIdx] = useState(-1);
   const [colEditIdx, setColEditIdx] = useState(-1);
@@ -140,21 +141,38 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       <Header />
+
+      
       
       <main className="max-w-6xl mx-auto px-4 py-8">
+
+        {showTip && (
+          <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md mb-4">
+            <p className="text-xs text-blue-700 dark:text-blue-300">
+              <strong>Tip:</strong> This app automatically detects your system's light/dark mode preference. Try switching your system theme to see it in action!
+            </p>
+            <button 
+              onClick={() => setShowTip(false)}
+              className="text-xs text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mt-1"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+        
         <div className="space-y-8">
                      {/* Upload Section */}
-           <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+           <section className="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-4">
              <UploadForm onFileUpload={handleFileInput} />
            </section>
 
                      {/* Table Section */}
-           <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+           <section className="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
              <div className="flex items-center justify-between mb-6">
-               <h2 className="text-lg font-semibold text-gray-800">Data Table</h2>
-               <div className="text-sm text-gray-500">
+               <h2 className="text-lg font-semibold text-zinc-800 dark:text-white">Data Table</h2>
+               <div className="text-sm text-zinc-500 dark:text-zinc-400">
                  {parsedCsv.length > 1 ? `${parsedCsv.length - 1} rows, ${parsedCsv[0]?.length || 0} columns` : 'No data loaded'}
                </div>
              </div>
@@ -169,7 +187,7 @@ function App() {
              />
 
                            {/* Table Controls */}
-              <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-700">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <ToggleEditButton
@@ -179,20 +197,20 @@ function App() {
                     />
                     <button 
                       onClick={addEmptyRow} 
-                      className="text-gray-600 hover:text-gray-800 cursor-pointer px-2 py-1 text-sm transition-colors"
+                      className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-800 dark:hover:text-white cursor-pointer px-2 py-1 text-sm transition-colors duration-200"
                     >
                       + Row
                     </button>
                     <button 
                       onClick={addEmptyCol} 
-                      className="text-gray-600 hover:text-gray-800 cursor-pointer px-2 py-1 text-sm transition-colors"
+                      className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-800 dark:hover:text-white cursor-pointer px-2 py-1 text-sm transition-colors duration-200"
                     >
                       + Column
                     </button>
                   </div>
                   <button 
                     onClick={handleDownload} 
-                    className="text-blue-600 hover:text-blue-700 cursor-pointer font-medium text-sm transition-colors"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer font-medium text-sm transition-colors duration-200"
                   >
                     Download
                   </button>

@@ -49,26 +49,26 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
     }
 
     return (
-        <div className="overflow-x-auto shadow-sm border border-gray-200 rounded-lg">
+        <div className="overflow-x-auto shadow-sm border border-zinc-200 dark:border-zinc-700 rounded-lg">
             <table className="min-w-full text-sm">
                 <thead>
-                    <tr className="bg-gray-50 border-b border-gray-200">
+                    <tr className="bg-zinc-50 dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700">
                         {parsedCsv[0].map((header, colIdx) => {
                             if (editMode) {
                                 if (rowEditIdx == 0 && colEditIdx == colIdx) {
-                                    return <th key={colIdx} className="px-6 py-4 text-left font-medium text-gray-700">
+                                    return <th key={colIdx} className="px-6 py-4 text-left font-medium text-zinc-700 dark:text-zinc-200">
                                         <input 
                                             type="text" 
                                             value={header}
                                             onChange={(e) => handleInputChange(e.target.value, 0, colIdx)}
-                                            className="w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 py-1 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
                                         />
                                     </th>
                                 } else {
                                     return <th 
                                         key={colIdx} 
                                         onClick={() => handleClick(0, colIdx)} 
-                                        className="px-6 py-4 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors duration-150"
+                                        className="px-6 py-4 text-left font-medium text-zinc-700 dark:text-zinc-200 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors duration-300"
                                     >
                                         {header}
                                     </th>
@@ -78,12 +78,12 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                 return <th 
                                     key={colIdx} 
                                     onClick={() => sortTable(colIdx)} 
-                                    className="px-6 py-4 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors duration-150"
+                                    className="px-6 py-4 text-left font-medium text-zinc-700 dark:text-zinc-200 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors duration-300"
                                 >
                                     <div className="flex items-center justify-between">
                                         <span>{header}</span>
                                         {sortByIdx === colIdx && (
-                                            <span className="ml-2 text-blue-600">
+                                            <span className="ml-2 text-blue-600 dark:text-blue-400">
                                                 {reverseSort ? '↓' : '↑'}
                                             </span>
                                         )}
@@ -94,18 +94,18 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                     </tr>
                 </thead>
 
-                <tbody className="bg-white">
+                <tbody className="bg-white dark:bg-zinc-900">
                     {parsedCsv.map((subArr, rowIdx) => 
-                        <tr key={rowIdx} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+                        <tr key={rowIdx} className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-300">
                             {rowIdx != 0 && subArr.map((val, colIdx) => {
                                 if (editMode && rowEditIdx == rowIdx && colEditIdx == colIdx) {
                                     return (
-                                        <td key={colIdx} className="px-6 py-4 text-gray-900">
+                                        <td key={colIdx} className="px-6 py-4 text-zinc-900 dark:text-white">
                                             <input 
                                                 type="text" 
                                                 value={val}
                                                 onChange={(e) => handleInputChange(e.target.value, rowIdx, colIdx)}
-                                                className="w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full px-3 py-1 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
                                             />
                                         </td>
                                     )
@@ -115,7 +115,7 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                             key={colIdx} 
                                             onClick={() => handleClick(rowIdx, colIdx)} 
                                             className={`px-6 py-4 ${editMode ? 'cursor-pointer' : ''} ${
-                                                isNumber(val) ? 'text-blue-600 font-medium' : 'text-gray-900'
+                                                isNumber(val) ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-zinc-900 dark:text-white'
                                             }`}
                                         >
                                             {val}
