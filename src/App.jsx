@@ -181,6 +181,7 @@ function App() {
                parsedCsv={parsedCsv}
                updateParsedCsv={updateParsedCsv}
                editMode={editMode}
+               updateEditModeStatus={updateEditModeStatus}
                rowEditIdx={rowEditIdx}
                colEditIdx={colEditIdx}
                updateEditIdx={updateEditIdx}

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 
-function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, 
-    rowEditIdx, colEditIdx, updateEditIdx }) {
+function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditModeStatus,
+    rowEditIdx, colEditIdx, updateEditIdx }) {  
 
     const [sortByIdx, setSortByIdx] = useState(-1);
     const [reverseSort, setReverseSort] = useState(false);
@@ -37,10 +37,34 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
         }
     }
 
+    const handleDoubleClick = (rowIdx, colIdx) => {
+        // Enable edit mode and set the cell to edit
+        updateEditIdx(rowIdx, colIdx);
+        updateEditModeStatus(true);
+    }
+
     const handleInputChange = (newValue, rowIdx, colIdx) => {
         const newTable = parsedCsv.map(subArr => [ ...subArr ]);
         newTable[rowIdx][colIdx] = newValue;
         updateParsedCsv(newTable);
+    }
+
+    const handleInputBlur = () => {
+        // Exit edit mode when input loses focus
+        updateEditIdx(-1, -1);
+        updateEditModeStatus(false);
+    }
+
+    const handleInputKeyDown = (e, rowIdx, colIdx) => {
+        if (e.key === 'Enter') {
+            // Exit edit mode when Enter is pressed
+            updateEditIdx(-1, -1);
+            updateEditModeStatus(false);
+        } else if (e.key === 'Escape') {
+            // Cancel editing and restore original value
+            updateEditIdx(-1, -1);
+            updateEditModeStatus(false);
+        }
     }
 
     // Helper function to check if a value is a number
@@ -61,13 +85,17 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                             type="text" 
                                             value={header}
                                             onChange={(e) => handleInputChange(e.target.value, 0, colIdx)}
+                                            onBlur={handleInputBlur}
+                                            onKeyDown={(e) => handleInputKeyDown(e, 0, colIdx)}
                                             className="w-full px-3 py-1 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+                                            autoFocus
                                         />
                                     </th>
                                 } else {
                                     return <th 
                                         key={colIdx} 
                                         onClick={() => handleClick(0, colIdx)} 
+                                        onDoubleClick={() => handleDoubleClick(0, colIdx)}
                                         className="px-6 py-4 text-left font-medium text-zinc-700 dark:text-zinc-200 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors duration-300"
                                     >
                                         {header}
@@ -105,7 +133,10 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                                 type="text" 
                                                 value={val}
                                                 onChange={(e) => handleInputChange(e.target.value, rowIdx, colIdx)}
+                                                onBlur={handleInputBlur}
+                                                onKeyDown={(e) => handleInputKeyDown(e, rowIdx, colIdx)}
                                                 className="w-full px-3 py-1 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+                                                autoFocus
                                             />
                                         </td>
                                     )
@@ -114,7 +145,8 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode,
                                         <td 
                                             key={colIdx} 
                                             onClick={() => handleClick(rowIdx, colIdx)} 
-                                            className={`px-6 py-4 ${editMode ? 'cursor-pointer' : ''} ${
+                                            onDoubleClick={() => handleDoubleClick(rowIdx, colIdx)}
+                                            className={`px-6 py-4 cursor-pointer ${
                                                 isNumber(val) ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-zinc-900 dark:text-white'
                                             }`}
                                         >
