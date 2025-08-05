@@ -49,6 +49,7 @@ function App() {
   const [colEditIdx, setColEditIdx] = useState(-1);
   const [editMode, setEditMode] = useState(false);
   const [originalFileName, setOriginalFileName] = useState("");
+  const [fileType, setFileType] = useState("");
   const [showSwapPopup, setShowSwapPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [deleteType, setDeleteType] = useState("row");
@@ -125,23 +126,31 @@ function App() {
       setOriginalFileName(file.name);
     } else {
       console.log("error submitting file");
+      return;
     }
 
     const reader = new FileReader();
-    let csvString;
 
     reader.onload = (event) => {
-      csvString = event.target.result;
-      console.log(event.target.result);
-      console.log(event.target.result.length);
-      setparsedData(parseCsv(event.target.result));
+      const fileContent = event.target.result;
+      console.log(fileContent);
+      console.log(fileContent.length);
+
+      // Determine file type by extension
+      const fileName = file.name.toLowerCase();
+      if (fileName.endsWith('.csv')) {
+        setparsedData(parseCsv(fileContent));
+        setFileType("csv");
+      } else if (fileName.endsWith('.tsv')) {
+        setparsedData(parseTsv(fileContent));
+        setFileType("tsv");
+      } else {
+        alert("Please upload a CSV or TSV file");
+        return;
+      }
     };
 
-    console.log(csvString);
-
     reader.readAsText(file);
-
-    console.log(csvString);
   };
 
   const updateparsedData = (updatedCsv) => {
@@ -175,14 +184,14 @@ function App() {
   };
 
   const handleDownload = () => {
-    const csvString = parsedData.map((row) => row.join(",")).join("\n");
+    const csvString = (fileType === "csv") ? parsedData.map((row) => row.join(",")).join("\n") : parsedData.map((row) => row.join("\t")).join("\n");
 
-    const blob = new Blob([csvString], { type: "text/csv" });
+    const blob = new Blob([csvString], { type: fileType === "csv" ? "text/csv" : "text/tab-separated-values" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = originalFileName || "untitled.csv";
+    a.download = originalFileName || "untitled." + fileType;
     a.click();
 
     URL.revokeObjectURL(url);
@@ -229,7 +238,7 @@ function App() {
         <div className="space-y-8">
           {/* Upload Section */}
           <section className="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-4">
-            <UploadForm onFileUpload={handleFileInput} />
+            <UploadForm onFileUpload={handleFileInput} fileName={originalFileName} />
           </section>
 
           {/* Table Section */}
