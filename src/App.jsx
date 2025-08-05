@@ -44,7 +44,7 @@ const realMadridGoals = [
 
 function App() {
   const [showTip, setShowTip] = useState(true);
-  const [parsedCsv, setParsedCsv] = useState(realMadridGoals);
+  const [parsedData, setparsedData] = useState(realMadridGoals);
   const [rowEditIdx, setRowEditIdx] = useState(-1);
   const [colEditIdx, setColEditIdx] = useState(-1);
   const [editMode, setEditMode] = useState(false);
@@ -134,7 +134,7 @@ function App() {
       csvString = event.target.result;
       console.log(event.target.result);
       console.log(event.target.result.length);
-      setParsedCsv(parseCsv(event.target.result));
+      setparsedData(parseCsv(event.target.result));
     };
 
     console.log(csvString);
@@ -144,8 +144,8 @@ function App() {
     console.log(csvString);
   };
 
-  const updateParsedCsv = (updatedCsv) => {
-    setParsedCsv(updatedCsv);
+  const updateparsedData = (updatedCsv) => {
+    setparsedData(updatedCsv);
   };
 
   const updateEditIdx = (rowIdx, colIdx) => {
@@ -158,7 +158,7 @@ function App() {
   };
 
   const addEmptyRow = () => {
-    const newTable = parsedCsv.map((subArr) => [...subArr]); // cloning
+    const newTable = parsedData.map((subArr) => [...subArr]); // cloning
     const newSubArr = [];
 
     for (let i = 0; i < newTable[0].length; i++) {
@@ -166,16 +166,16 @@ function App() {
     }
     newTable.push(newSubArr);
 
-    setParsedCsv(newTable);
+    setparsedData(newTable);
   };
 
   const addEmptyCol = () => {
-    const newTable = parsedCsv.map((subArr) => [...subArr, "-"]);
-    setParsedCsv(newTable);
+    const newTable = parsedData.map((subArr) => [...subArr, "-"]);
+    setparsedData(newTable);
   };
 
   const handleDownload = () => {
-    const csvString = parsedCsv.map((row) => row.join(",")).join("\n");
+    const csvString = parsedData.map((row) => row.join(",")).join("\n");
 
     const blob = new Blob([csvString], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -189,7 +189,7 @@ function App() {
   };
 
   const handleSwap = (type, idx1, idx2) => {
-    const newTable = parsedCsv.map((subArr) => [...subArr]);
+    const newTable = parsedData.map((subArr) => [...subArr]);
 
     if (type === "row") {
       const temp = newTable[idx1];
@@ -202,7 +202,7 @@ function App() {
         newTable[i][idx2] = temp;
       }
     }
-    setParsedCsv(newTable);
+    setparsedData(newTable);
   };
 
   return (
@@ -239,17 +239,17 @@ function App() {
                 Data Table
               </h2>
               <div className="text-sm text-zinc-500 dark:text-zinc-400">
-                {parsedCsv.length > 1
-                  ? `${parsedCsv.length - 1} rows, ${
-                      parsedCsv[0]?.length || 0
+                {parsedData.length > 1
+                  ? `${parsedData.length - 1} rows, ${
+                      parsedData[0]?.length || 0
                     } columns`
                   : "No data loaded"}
               </div>
             </div>
 
             <InteractiveTable
-              parsedCsv={parsedCsv}
-              updateParsedCsv={updateParsedCsv}
+              parsedData={parsedData}
+              updateparsedData={updateparsedData}
               editMode={editMode}
               updateEditModeStatus={updateEditModeStatus}
               rowEditIdx={rowEditIdx}
@@ -319,9 +319,9 @@ function App() {
         isOpen={showSwapPopup}
         onClose={() => setShowSwapPopup(false)}
         onSwap={handleSwap}
-        maxRows={parsedCsv.length}
-        maxCols={parsedCsv[0]?.length || 0}
-        parsedCsv={parsedCsv}
+        maxRows={parsedData.length}
+        maxCols={parsedData[0]?.length || 0}
+        parsedData={parsedData}
       />
 
       <DeletePopup
@@ -331,9 +331,9 @@ function App() {
           // Placeholder for delete logic - will implement later
           console.log(`Deleting ${type} at index ${idx}`);
         }}
-        maxRows={parsedCsv.length}
-        maxCols={parsedCsv[0]?.length || 0}
-        parsedCsv={parsedCsv}
+        maxRows={parsedData.length}
+        maxCols={parsedData[0]?.length || 0}
+        parsedData={parsedData}
         deleteType={deleteType}
       />
 
