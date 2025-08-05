@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import UploadForm from "./components/UploadForm";
 import SwapPopup from "./components/SwapPopup";
 import DeletePopup from "./components/DeletePopup";
+import DownloadPopup from "./components/DownloadPopup";
 import Footer from "./components/Footer";
 
 const realMadridGoals = [
@@ -52,6 +53,7 @@ function App() {
   const [fileType, setFileType] = useState("");
   const [showSwapPopup, setShowSwapPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [deleteType, setDeleteType] = useState("row");
 
   const parseCsv = (csvString) => {
@@ -183,15 +185,15 @@ function App() {
     setparsedData(newTable);
   };
 
-  const handleDownload = () => {
-    const csvString = (fileType === "csv") ? parsedData.map((row) => row.join(",")).join("\n") : parsedData.map((row) => row.join("\t")).join("\n");
+  const handleDownload = (filename, downloadType) => {
+    const csvString = (downloadType === "csv") ? parsedData.map((row) => row.join(",")).join("\n") : parsedData.map((row) => row.join("\t")).join("\n");
 
-    const blob = new Blob([csvString], { type: fileType === "csv" ? "text/csv" : "text/tab-separated-values" });
+    const blob = new Blob([csvString], { type: downloadType === "csv" ? "text/csv" : "text/tab-separated-values" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = originalFileName || "untitled." + fileType;
+    a.download = filename;
     a.click();
 
     URL.revokeObjectURL(url);
@@ -313,7 +315,7 @@ function App() {
                   </button>
                 </div>
                 <button
-                  onClick={handleDownload}
+                  onClick={() => setShowDownloadPopup(true)}
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer font-medium text-sm transition-colors duration-200"
                 >
                   Download
@@ -344,6 +346,14 @@ function App() {
         maxCols={parsedData[0]?.length || 0}
         parsedData={parsedData}
         deleteType={deleteType}
+      />
+
+      <DownloadPopup
+        isOpen={showDownloadPopup}
+        onClose={() => setShowDownloadPopup(false)}
+        onDownload={handleDownload}
+        originalFileName={originalFileName}
+        originalFileType={fileType}
       />
 
       <Footer />
