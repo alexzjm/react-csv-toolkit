@@ -85,6 +85,38 @@ function App() {
     return table;
   };
 
+  const parseTsv = (tsvString) => {
+    const table = [];
+    let startIdx = 0,
+      endIdx = 0;
+    const subArr = [];
+    if (!tsvString) {
+      console.log("NOT FOUND");
+      return;
+    }
+    console.log("the length of the input tsvstring is " + tsvString.length);
+    while (endIdx < tsvString.length) {
+      if (tsvString[endIdx] == "\t" || tsvString[endIdx] == "\n") {
+        const value = tsvString.slice(startIdx, endIdx);
+        // Convert to number if possible, otherwise keep as string
+        const numValue = parseFloat(value);
+        subArr.push(!isNaN(numValue) && value.trim() !== "" ? numValue : value);
+        console.log(tsvString.slice(startIdx, endIdx));
+        console.log(subArr);
+        startIdx = endIdx + 1;
+        if (tsvString[endIdx] == "\n") {
+          table.push([...subArr]);
+          subArr.splice(0, subArr.length);
+        }
+      } else if (tsvString[endIdx] == "\r") {
+        console.log("Unexpected escape character found");
+      }
+      endIdx++;
+    }
+
+    return table;
+  };
+
   const handleFileInput = (files) => {
     const file = files[0];
 
