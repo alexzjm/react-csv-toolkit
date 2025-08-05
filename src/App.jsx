@@ -142,6 +142,23 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleSwap = (type, idx1, idx2) => {
+    const newTable = parsedCsv.map(subArr => [ ...subArr ]);
+
+    if (type === "row") {
+      const temp = newTable[idx1];
+      newTable[idx1] = newTable[idx2];
+      newTable[idx2] = temp;
+    } else {
+      for (let i = 0; i < newTable.length; i++) {
+        const temp = newTable[i][idx1];
+        newTable[i][idx1] = newTable[i][idx2];
+        newTable[i][idx2] = temp;
+      }
+    }
+    setParsedCsv(newTable);
+  }
+
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       <Header />
@@ -232,10 +249,7 @@ function App() {
       <SwapPopup 
         isOpen={showSwapPopup}
         onClose={() => setShowSwapPopup(false)}
-        onSwap={(type, idx1, idx2) => {
-          // Placeholder for swap logic - will implement later
-          console.log(`Swapping ${type}s at indices ${idx1} and ${idx2}`);
-        }}
+        onSwap={handleSwap}
         maxRows={parsedCsv.length}
         maxCols={parsedCsv[0]?.length || 0}
         parsedCsv={parsedCsv}
