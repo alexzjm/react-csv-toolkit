@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function SwapPopup({ isOpen, onClose, onSwap, maxRows, maxCols, parsedCsv }) {
   const [swapType, setSwapType] = useState("row"); // 'row' or 'column'
@@ -164,6 +166,20 @@ function SwapPopup({ isOpen, onClose, onSwap, maxRows, maxCols, parsedCsv }) {
             Enter indices between 0 and{" "}
             {swapType === "row" ? maxRows - 1 : maxCols - 1}
           </p>
+
+          {/* Warning for Row 0 */}
+          {swapType === "row" && (index1 === "0" || index2 === "0") && (
+            <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-md p-3">
+              <p className="text-xs text-zinc-600 dark:text-zinc-300">
+                <FontAwesomeIcon
+                  icon={faTriangleExclamation}
+                  className="mr-1"
+                />{" "}
+                <strong>Note:</strong> Row 0 is typically the header row.
+                Swapping it may affect your data structure.
+              </p>
+            </div>
+          )}
 
           {/* Preview Section */}
           {(index1 !== "" || index2 !== "") && (
