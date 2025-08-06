@@ -13,7 +13,14 @@ const Header = () => {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">By Alex Zhang</p>
+            <a 
+              href="https://github.com/alexzjm" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors duration-200"
+            >
+              By Alex Zhang
+            </a>
           </div>
         </div>
       </div>

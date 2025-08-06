@@ -9,7 +9,14 @@ const Footer = () => {
           <a href="https://www.flaticon.com/free-icons/csv" title="csv icons">Csv icons created by Freepik - Flaticon</a>
         </div>
         <div>
-          Author: Alex Zhang
+          <a 
+            href="https://github.com/alexzjm" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors duration-200"
+          >
+            By Alex Zhang
+          </a>
         </div>
       </div>
     </footer>
