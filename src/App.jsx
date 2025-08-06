@@ -55,6 +55,8 @@ function App() {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [deleteType, setDeleteType] = useState("row");
+  const [sortByIdx, setSortByIdx] = useState(-1);
+  const [reverseSort, setReverseSort] = useState(false);
 
   const parseCsv = (csvString) => {
     const table = [];
@@ -225,6 +227,9 @@ function App() {
       const temp = newTable[idx1];
       newTable[idx1] = newTable[idx2];
       newTable[idx2] = temp;
+      // Reset sorting when rows are swapped
+      setSortByIdx(-1);
+      setReverseSort(false);
     } else {
       for (let i = 0; i < newTable.length; i++) {
         const temp = newTable[i][idx1];
@@ -285,6 +290,10 @@ function App() {
               rowEditIdx={rowEditIdx}
               colEditIdx={colEditIdx}
               updateEditIdx={updateEditIdx}
+              sortByIdx={sortByIdx}
+              setSortByIdx={setSortByIdx}
+              reverseSort={reverseSort}
+              setReverseSort={setReverseSort}
             />
 
             {/* Table Controls */}

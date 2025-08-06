@@ -2,10 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 
 function InteractiveTable({ parsedData, updateparsedData, editMode, updateEditModeStatus,
-    rowEditIdx, colEditIdx, updateEditIdx }) {  
-
-    const [sortByIdx, setSortByIdx] = useState(-1);
-    const [reverseSort, setReverseSort] = useState(false);
+    rowEditIdx, colEditIdx, updateEditIdx, sortByIdx, setSortByIdx, reverseSort, setReverseSort }) {
     
     // helper function: sort the 2d table depending on the column and its type
     const sortTable = (colIdx) => {
