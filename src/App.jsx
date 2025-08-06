@@ -85,7 +85,7 @@ function App() {
       endIdx++;
     }
 
-    return table;
+    return fillEmptyCells(table);
   };
 
   const parseTsv = (tsvString) => {
@@ -117,8 +117,27 @@ function App() {
       endIdx++;
     }
 
-    return table;
+    return fillEmptyCells(table);
   };
+
+  const fillEmptyCells = (table) => {
+    // for rows with uneven number of cells, fill the empty cells with ""
+    let maxLength = 0;
+
+    for (let i = 0; i < table.length; i++) {
+      if (table[i].length > maxLength) {
+        maxLength = table[i].length;
+      }
+    }
+
+    for (let i = 0; i < table.length; i++) {
+      while (table[i].length < maxLength) {
+        table[i].push("");
+      }
+    }
+
+    return table;
+  }
 
   const handleFileInput = (files) => {
     const file = files[0];
@@ -173,7 +192,7 @@ function App() {
     const newSubArr = [];
 
     for (let i = 0; i < newTable[0].length; i++) {
-      newSubArr.push("-");
+      newSubArr.push("");
     }
     newTable.push(newSubArr);
 
@@ -181,7 +200,7 @@ function App() {
   };
 
   const addEmptyCol = () => {
-    const newTable = parsedData.map((subArr) => [...subArr, "-"]);
+    const newTable = parsedData.map((subArr) => [...subArr, ""]);
     setparsedData(newTable);
   };
 
