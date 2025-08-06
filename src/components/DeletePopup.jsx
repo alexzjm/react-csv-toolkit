@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-function DeletePopup({ isOpen, onClose, onDelete, maxRows, maxCols, parsedCsv, deleteType }) {
+function DeletePopup({ isOpen, onClose, onDelete, maxRows, maxCols, parsedData, deleteType }) {
   const [index, setIndex] = useState("");
 
   const handleSubmit = (e) => {
@@ -34,16 +34,16 @@ function DeletePopup({ isOpen, onClose, onDelete, maxRows, maxCols, parsedCsv, d
 
   // Helper function to get preview content
   const getPreviewContent = (index) => {
-    if (!parsedCsv || parsedCsv.length === 0) return null;
+    if (!parsedData || parsedData.length === 0) return null;
 
     if (deleteType === "row") {
-      if (index >= 0 && index < parsedCsv.length) {
-        return parsedCsv[index];
+      if (index >= 0 && index < parsedData.length) {
+        return parsedData[index];
       }
     } else {
       // For columns, get all values in that column
-      if (index >= 0 && index < (parsedCsv[0]?.length || 0)) {
-        return parsedCsv.map((row) => row[index]).slice(0, 5); // Show first 5 values
+      if (index >= 0 && index < (parsedData[0]?.length || 0)) {
+        return parsedData.map((row) => row[index]).slice(0, 5); // Show first 5 values
       }
     }
     return null;

@@ -1,11 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 
-function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditModeStatus,
-    rowEditIdx, colEditIdx, updateEditIdx }) {  
-
-    const [sortByIdx, setSortByIdx] = useState(-1);
-    const [reverseSort, setReverseSort] = useState(false);
+function InteractiveTable({ parsedData, updateparsedData, editMode, updateEditModeStatus,
+    rowEditIdx, colEditIdx, updateEditIdx, sortByIdx, setSortByIdx, reverseSort, setReverseSort }) {
     
     // helper function: sort the 2d table depending on the column and its type
     const sortTable = (colIdx) => {
@@ -19,7 +16,7 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditMode
             revSort = !reverseSort;
         }
 
-        const tempTable = parsedCsv.slice(1);
+        const tempTable = parsedData.slice(1);
         tempTable.sort((a, b) => {
             if (revSort) {
                 return a[colIdx] < b[colIdx] ? 1 : -1;
@@ -27,8 +24,8 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditMode
                 return a[colIdx] > b[colIdx] ? 1 : -1;
             }
         });
-        const newTable = parsedCsv.slice(0, 1).concat(tempTable);
-        updateParsedCsv(newTable);
+        const newTable = parsedData.slice(0, 1).concat(tempTable);
+        updateparsedData(newTable);
     }
 
     const handleClick = (rowIdx, colIdx) => {
@@ -44,9 +41,9 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditMode
     }
 
     const handleInputChange = (newValue, rowIdx, colIdx) => {
-        const newTable = parsedCsv.map(subArr => [ ...subArr ]);
+        const newTable = parsedData.map(subArr => [ ...subArr ]);
         newTable[rowIdx][colIdx] = newValue;
-        updateParsedCsv(newTable);
+        updateparsedData(newTable);
     }
 
     const handleInputBlur = () => {
@@ -77,7 +74,7 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditMode
             <table className="min-w-full text-sm">
                 <thead>
                     <tr className="bg-zinc-50 dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700">
-                        {parsedCsv[0].map((header, colIdx) => {
+                        {parsedData[0].map((header, colIdx) => {
                             if (editMode) {
                                 if (rowEditIdx == 0 && colEditIdx == colIdx) {
                                     return <th key={colIdx} className="px-6 py-4 text-left font-medium text-zinc-700 dark:text-zinc-200">
@@ -123,7 +120,7 @@ function InteractiveTable({ parsedCsv, updateParsedCsv, editMode, updateEditMode
                 </thead>
 
                 <tbody className="bg-white dark:bg-zinc-900">
-                    {parsedCsv.map((subArr, rowIdx) => 
+                    {parsedData.map((subArr, rowIdx) => 
                         <tr key={rowIdx} className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-300">
                             {rowIdx != 0 && subArr.map((val, colIdx) => {
                                 if (editMode && rowEditIdx == rowIdx && colEditIdx == colIdx) {

@@ -2,9 +2,8 @@ import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 
-const UploadForm = ({ onFileUpload }) => {
+const UploadForm = ({ onFileUpload, fileName }) => {
   const [isDragOver, setIsDragOver] = useState(false);
-  const [fileName, setFileName] = useState('');
   const fileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
@@ -24,8 +23,7 @@ const UploadForm = ({ onFileUpload }) => {
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       const file = files[0];
-      if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
-        setFileName(file.name);
+      if (file.type === 'text/csv' || file.name.endsWith('.csv') || file.name.endsWith('.tsv')) {
         onFileUpload([file]);
       } else {
         alert('Please upload a CSV file');
@@ -36,8 +34,6 @@ const UploadForm = ({ onFileUpload }) => {
   const handleFileSelect = (e) => {
     const files = e.target.files;
     if (files.length > 0) {
-      const file = files[0];
-      setFileName(file.name);
       onFileUpload(files);
     }
   };
@@ -66,7 +62,7 @@ const UploadForm = ({ onFileUpload }) => {
         
         <div>
           <h3 className="text-lg font-medium text-zinc-700 dark:text-zinc-200 mb-1">
-            {fileName ? fileName : 'Upload CSV File'}
+            {fileName ? fileName : 'Upload CSV/TSV File'}
           </h3>
           
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -89,7 +85,7 @@ const UploadForm = ({ onFileUpload }) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept=".csv"
+        accept=".csv,.tsv"
         onChange={handleFileSelect}
         className="hidden"
       />

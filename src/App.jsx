@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import UploadForm from "./components/UploadForm";
 import SwapPopup from "./components/SwapPopup";
 import DeletePopup from "./components/DeletePopup";
+import DownloadPopup from "./components/DownloadPopup";
 import Footer from "./components/Footer";
 
 const realMadridGoals = [
@@ -44,14 +45,18 @@ const realMadridGoals = [
 
 function App() {
   const [showTip, setShowTip] = useState(true);
-  const [parsedCsv, setParsedCsv] = useState(realMadridGoals);
+  const [parsedData, setparsedData] = useState(realMadridGoals);
   const [rowEditIdx, setRowEditIdx] = useState(-1);
   const [colEditIdx, setColEditIdx] = useState(-1);
   const [editMode, setEditMode] = useState(false);
   const [originalFileName, setOriginalFileName] = useState("");
+  const [fileType, setFileType] = useState("");
   const [showSwapPopup, setShowSwapPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
   const [deleteType, setDeleteType] = useState("row");
+  const [sortByIdx, setSortByIdx] = useState(-1);
+  const [reverseSort, setReverseSort] = useState(false);
 
   const parseCsv = (csvString) => {
     const table = [];
@@ -82,8 +87,59 @@ function App() {
       endIdx++;
     }
 
-    return table;
+    return fillEmptyCells(table);
   };
+
+  const parseTsv = (tsvString) => {
+    const table = [];
+    let startIdx = 0,
+      endIdx = 0;
+    const subArr = [];
+    if (!tsvString) {
+      console.log("NOT FOUND");
+      return;
+    }
+    console.log("the length of the input tsvstring is " + tsvString.length);
+    while (endIdx < tsvString.length) {
+      if (tsvString[endIdx] == "\t" || tsvString[endIdx] == "\n") {
+        const value = tsvString.slice(startIdx, endIdx);
+        // Convert to number if possible, otherwise keep as string
+        const numValue = parseFloat(value);
+        subArr.push(!isNaN(numValue) && value.trim() !== "" ? numValue : value);
+        console.log(tsvString.slice(startIdx, endIdx));
+        console.log(subArr);
+        startIdx = endIdx + 1;
+        if (tsvString[endIdx] == "\n") {
+          table.push([...subArr]);
+          subArr.splice(0, subArr.length);
+        }
+      } else if (tsvString[endIdx] == "\r") {
+        console.log("Unexpected escape character found");
+      }
+      endIdx++;
+    }
+
+    return fillEmptyCells(table);
+  };
+
+  const fillEmptyCells = (table) => {
+    // for rows with uneven number of cells, fill the empty cells with ""
+    let maxLength = 0;
+
+    for (let i = 0; i < table.length; i++) {
+      if (table[i].length > maxLength) {
+        maxLength = table[i].length;
+      }
+    }
+
+    for (let i = 0; i < table.length; i++) {
+      while (table[i].length < maxLength) {
+        table[i].push("");
+      }
+    }
+
+    return table;
+  }
 
   const handleFileInput = (files) => {
     const file = files[0];
@@ -93,27 +149,35 @@ function App() {
       setOriginalFileName(file.name);
     } else {
       console.log("error submitting file");
+      return;
     }
 
     const reader = new FileReader();
-    let csvString;
 
     reader.onload = (event) => {
-      csvString = event.target.result;
-      console.log(event.target.result);
-      console.log(event.target.result.length);
-      setParsedCsv(parseCsv(event.target.result));
+      const fileContent = event.target.result;
+      console.log(fileContent);
+      console.log(fileContent.length);
+
+      // Determine file type by extension
+      const fileName = file.name.toLowerCase();
+      if (fileName.endsWith('.csv')) {
+        setparsedData(parseCsv(fileContent));
+        setFileType("csv");
+      } else if (fileName.endsWith('.tsv')) {
+        setparsedData(parseTsv(fileContent));
+        setFileType("tsv");
+      } else {
+        alert("Please upload a CSV or TSV file");
+        return;
+      }
     };
 
-    console.log(csvString);
-
     reader.readAsText(file);
-
-    console.log(csvString);
   };
 
-  const updateParsedCsv = (updatedCsv) => {
-    setParsedCsv(updatedCsv);
+  const updateparsedData = (updatedCsv) => {
+    setparsedData(updatedCsv);
   };
 
   const updateEditIdx = (rowIdx, colIdx) => {
@@ -126,43 +190,46 @@ function App() {
   };
 
   const addEmptyRow = () => {
-    const newTable = parsedCsv.map((subArr) => [...subArr]); // cloning
+    const newTable = parsedData.map((subArr) => [...subArr]); // cloning
     const newSubArr = [];
 
     for (let i = 0; i < newTable[0].length; i++) {
-      newSubArr.push("-");
+      newSubArr.push("");
     }
     newTable.push(newSubArr);
 
-    setParsedCsv(newTable);
+    setparsedData(newTable);
   };
 
   const addEmptyCol = () => {
-    const newTable = parsedCsv.map((subArr) => [...subArr, "-"]);
-    setParsedCsv(newTable);
+    const newTable = parsedData.map((subArr) => [...subArr, ""]);
+    setparsedData(newTable);
   };
 
-  const handleDownload = () => {
-    const csvString = parsedCsv.map((row) => row.join(",")).join("\n");
+  const handleDownload = (filename, downloadType) => {
+    const csvString = (downloadType === "csv") ? parsedData.map((row) => row.join(",")).join("\n") : parsedData.map((row) => row.join("\t")).join("\n");
 
-    const blob = new Blob([csvString], { type: "text/csv" });
+    const blob = new Blob([csvString], { type: downloadType === "csv" ? "text/csv" : "text/tab-separated-values" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = originalFileName || "untitled.csv";
+    a.download = filename;
     a.click();
 
     URL.revokeObjectURL(url);
   };
 
   const handleSwap = (type, idx1, idx2) => {
-    const newTable = parsedCsv.map((subArr) => [...subArr]);
+    const newTable = parsedData.map((subArr) => [...subArr]);
 
     if (type === "row") {
       const temp = newTable[idx1];
       newTable[idx1] = newTable[idx2];
       newTable[idx2] = temp;
+      // Reset sorting when rows are swapped
+      setSortByIdx(-1);
+      setReverseSort(false);
     } else {
       for (let i = 0; i < newTable.length; i++) {
         const temp = newTable[i][idx1];
@@ -170,7 +237,7 @@ function App() {
         newTable[i][idx2] = temp;
       }
     }
-    setParsedCsv(newTable);
+    setparsedData(newTable);
   };
 
   return (
@@ -197,7 +264,7 @@ function App() {
         <div className="space-y-8">
           {/* Upload Section */}
           <section className="bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-4">
-            <UploadForm onFileUpload={handleFileInput} />
+            <UploadForm onFileUpload={handleFileInput} fileName={originalFileName} />
           </section>
 
           {/* Table Section */}
@@ -207,22 +274,26 @@ function App() {
                 Data Table
               </h2>
               <div className="text-sm text-zinc-500 dark:text-zinc-400">
-                {parsedCsv.length > 1
-                  ? `${parsedCsv.length - 1} rows, ${
-                      parsedCsv[0]?.length || 0
+                {parsedData.length > 1
+                  ? `${parsedData.length - 1} rows, ${
+                      parsedData[0]?.length || 0
                     } columns`
                   : "No data loaded"}
               </div>
             </div>
 
             <InteractiveTable
-              parsedCsv={parsedCsv}
-              updateParsedCsv={updateParsedCsv}
+              parsedData={parsedData}
+              updateparsedData={updateparsedData}
               editMode={editMode}
               updateEditModeStatus={updateEditModeStatus}
               rowEditIdx={rowEditIdx}
               colEditIdx={colEditIdx}
               updateEditIdx={updateEditIdx}
+              sortByIdx={sortByIdx}
+              setSortByIdx={setSortByIdx}
+              reverseSort={reverseSort}
+              setReverseSort={setReverseSort}
             />
 
             {/* Table Controls */}
@@ -272,7 +343,7 @@ function App() {
                   </button>
                 </div>
                 <button
-                  onClick={handleDownload}
+                  onClick={() => setShowDownloadPopup(true)}
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 cursor-pointer font-medium text-sm transition-colors duration-200"
                 >
                   Download
@@ -287,9 +358,9 @@ function App() {
         isOpen={showSwapPopup}
         onClose={() => setShowSwapPopup(false)}
         onSwap={handleSwap}
-        maxRows={parsedCsv.length}
-        maxCols={parsedCsv[0]?.length || 0}
-        parsedCsv={parsedCsv}
+        maxRows={parsedData.length}
+        maxCols={parsedData[0]?.length || 0}
+        parsedData={parsedData}
       />
 
       <DeletePopup
@@ -299,10 +370,18 @@ function App() {
           // Placeholder for delete logic - will implement later
           console.log(`Deleting ${type} at index ${idx}`);
         }}
-        maxRows={parsedCsv.length}
-        maxCols={parsedCsv[0]?.length || 0}
-        parsedCsv={parsedCsv}
+        maxRows={parsedData.length}
+        maxCols={parsedData[0]?.length || 0}
+        parsedData={parsedData}
         deleteType={deleteType}
+      />
+
+      <DownloadPopup
+        isOpen={showDownloadPopup}
+        onClose={() => setShowDownloadPopup(false)}
+        onDownload={handleDownload}
+        originalFileName={originalFileName}
+        originalFileType={fileType}
       />
 
       <Footer />
